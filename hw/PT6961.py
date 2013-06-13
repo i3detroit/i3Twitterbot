@@ -1,11 +1,11 @@
-#!/user/bin/env python
+#!/usr/bin/env python
 
 from spi import SPI
 
 port = SPI(2,0)
-port.msh = 1000000
-port.lsbfirst = True
-port.mode = 0b00
+port.msh = 10000
+port.lsbfirst = False
+port.mode = 0b11
 
 _DISPLAY_6X12 = 0x02                         
 _DISPLAY_7X11 = 0x03                         
@@ -30,18 +30,23 @@ def initDisplay():
 	sendCmd(_AUTO_INCREMENT)
 	initRAM()
 	sendCmd(_DISPLAY_14_16)
+	print 'Init Display'
 
 def initRAM():
 	port.writebytes([0xC0] + [0x00] * 8)
+	print 'Init RAM'
 
 def sendCmd(cmd):
 	port.writebytes([cmd])
+	print 'Sending CMD %s'%cmd
 
 def sendDigit(digit,val):
 	port.writebytes([addresses[digit],font[val]])
+#	print 'Sending digit %s value %s'%(digit,val)
 
 def sendNum(num,colon=False):
 	digits = map(int,str(num))
+#	print 'Sending %s as %s (%s)'%(num,digits,('no colon','with colon')[colon])
 	sendDigits(digits,colon)
 
 def sendDigits(digits,colon=False):
@@ -53,8 +58,16 @@ def sendDigits(digits,colon=False):
 	for addr,digit in zip(addresses,digits):
 		d.append(addr)
 		d.append(digit)
+#	print 'Sending %s as %s'%(digits,d)
 	port.writebytes(d)
 
 if __name__ == "__main__":
-	initDisplay()
-	sendNum(1234)
+	freqs = [65000]#reversed(map(lambda x: 12000000/(2**x),xrange(10)))
+	msh = freqs[0]
+	while True:#for msh in freqs:
+		#raw_input()
+		port.msh = msh
+		print msh
+		initDisplay()
+		for i in xrange(1000):
+			sendNum(i)
