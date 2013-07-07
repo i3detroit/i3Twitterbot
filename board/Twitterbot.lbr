@@ -69,11 +69,8 @@
 <wire x1="2.54" y1="-2.54" x2="0" y2="-2.54" width="0.127" layer="21"/>
 <wire x1="0" y1="-2.54" x2="-2.54" y2="-2.54" width="0.127" layer="21"/>
 <wire x1="0" y1="2.54" x2="0" y2="-2.54" width="0.127" layer="21"/>
-<wire x1="0" y1="6.35" x2="0" y2="3.81" width="0.127" layer="21"/>
-<wire x1="-1.27" y1="5.08" x2="1.27" y2="5.08" width="0.127" layer="21"/>
-<wire x1="-1.27" y1="-5.08" x2="1.27" y2="-5.08" width="0.127" layer="21"/>
-<text x="5.08" y="-1.27" size="1.27" layer="21" rot="R90">RED</text>
-<text x="-3.81" y="-1.27" size="1.27" layer="21" rot="R90">GRN</text>
+<text x="0" y="2.54" size="1.27" layer="51" rot="R180" align="top-center">+</text>
+<text x="0" y="-2.54" size="1.27" layer="51" align="top-center">-</text>
 </package>
 <package name="1X6">
 <description>4-digit 7-segment display</description>
@@ -86,11 +83,6 @@
 <wire x1="-1.27" y1="7.62" x2="1.27" y2="7.62" width="0.127" layer="21"/>
 <wire x1="1.27" y1="7.62" x2="1.27" y2="-7.62" width="0.127" layer="21"/>
 <wire x1="1.27" y1="-7.62" x2="-1.27" y2="-7.62" width="0.127" layer="21"/>
-<text x="-3.81" y="-6.35" size="1.27" layer="51" font="vector" align="center">GND</text>
-<text x="-3.81" y="6.35" size="1.27" layer="51" font="vector" align="center">VCC</text>
-<text x="-3.81" y="3.81" size="1.27" layer="51" font="vector" align="center">CS#</text>
-<text x="-3.81" y="1.27" size="1.27" layer="51" font="vector" align="center">SCLK</text>
-<text x="-3.81" y="-1.27" size="1.27" layer="51" font="vector" align="center">MOSI</text>
 <text x="0" y="8.89" size="1.27" layer="25" font="vector" align="center">&gt;NAME</text>
 <text x="0" y="-8.89" size="1.27" layer="27" font="vector" align="center">&gt;VALUE</text>
 </package>
@@ -103,9 +95,8 @@
 <wire x1="1.27" y1="-3.81" x2="-1.27" y2="-3.81" width="0.127" layer="21"/>
 <wire x1="-1.27" y1="-3.81" x2="-1.27" y2="3.81" width="0.127" layer="21"/>
 <wire x1="-1.27" y1="3.81" x2="1.27" y2="3.81" width="0.127" layer="21"/>
-<text x="-3.81" y="2.54" size="1.27" layer="21" font="vector" align="center">NC</text>
-<text x="-3.81" y="-2.54" size="1.27" layer="21" font="vector" align="center">NO</text>
-<text x="-3.81" y="0" size="1.27" layer="21" font="vector" align="center">COM</text>
+<text x="-3.81" y="5.08" size="1.27" layer="25">&gt;NAME</text>
+<text x="-3.81" y="-6.35" size="1.27" layer="27">&gt;VALUE</text>
 </package>
 <package name="TO263">
 <description>TO-263 5-lead</description>
@@ -119,6 +110,26 @@
 <wire x1="6.35" y1="5.08" x2="6.35" y2="4.445" width="0.127" layer="21"/>
 <wire x1="6.35" y1="-5.08" x2="6.35" y2="-4.445" width="0.127" layer="21"/>
 <smd name="TAB" x="-3.6195" y="0" dx="6.985" dy="8.3312" layer="1" rot="R180"/>
+</package>
+<package name="INDUCTOR">
+<description>Inductor</description>
+<smd name="1" x="-7.685" y="0" dx="2.92" dy="2.79" layer="1"/>
+<smd name="2" x="7.685" y="0" dx="2.92" dy="2.79" layer="1"/>
+<wire x1="-9.225" y1="2" x2="-2.60135" y2="7.035221875" width="0.127" layer="21"/>
+<wire x1="-2.60135" y1="7.035221875" x2="2.60135" y2="7.035221875" width="0.127" layer="21" curve="-62.700726"/>
+<wire x1="2.60135" y1="7.035221875" x2="9.225" y2="2" width="0.127" layer="21"/>
+<wire x1="9.225" y1="-2" x2="2.60135" y2="-7.035221875" width="0.127" layer="21"/>
+<wire x1="2.60135" y1="-7.035221875" x2="-2.60135" y2="-7.035221875" width="0.127" layer="21" curve="-62.700726"/>
+<wire x1="-2.60135" y1="-7.035221875" x2="-9.225" y2="-2" width="0.127" layer="21"/>
+<text x="-3" y="4" size="1.27" layer="25">&gt;NAME</text>
+<text x="-3" y="-5" size="1.27" layer="27">&gt;VALUE</text>
+</package>
+<package name="2920">
+<description>Littelfuse 2920</description>
+<smd name="1" x="-3.302" y="0" dx="2.0066" dy="5.3086" layer="1"/>
+<smd name="2" x="3.302" y="0" dx="2.0066" dy="5.3086" layer="1"/>
+<wire x1="-3.937" y1="-2.667" x2="3.937" y2="-2.667" width="0.127" layer="21"/>
+<wire x1="3.937" y1="2.667" x2="-3.937" y2="2.667" width="0.127" layer="21"/>
 </package>
 </packages>
 <symbols>
@@ -194,6 +205,26 @@
 <text x="-5.08" y="12.7" size="1.778" layer="95">&gt;NAME</text>
 <text x="-5.08" y="-12.7" size="1.778" layer="96">&gt;VALUE</text>
 </symbol>
+<symbol name="INDUCTOR">
+<description>Inductor</description>
+<pin name="1" x="-5.08" y="0" visible="pad" length="short"/>
+<pin name="2" x="7.62" y="0" visible="pad" length="short" rot="R180"/>
+<rectangle x1="-2.54" y1="-2.54" x2="5.08" y2="2.54" layer="94"/>
+<text x="-2.54" y="2.54" size="1.778" layer="95">&gt;NAME</text>
+<text x="-2.54" y="-5.08" size="1.778" layer="96">&gt;VALUE</text>
+</symbol>
+<symbol name="FUSE">
+<description>Fuse</description>
+<wire x1="-3.81" y1="-0.762" x2="3.81" y2="-0.762" width="0.254" layer="94"/>
+<wire x1="3.81" y1="0.762" x2="-3.81" y2="0.762" width="0.254" layer="94"/>
+<wire x1="3.81" y1="-0.762" x2="3.81" y2="0.762" width="0.254" layer="94"/>
+<wire x1="-3.81" y1="0.762" x2="-3.81" y2="-0.762" width="0.254" layer="94"/>
+<wire x1="-2.54" y1="0" x2="2.54" y2="0" width="0.1524" layer="94"/>
+<text x="-3.81" y="1.397" size="1.778" layer="95">&gt;NAME</text>
+<text x="-3.81" y="-2.921" size="1.778" layer="96">&gt;VALUE</text>
+<pin name="2" x="5.08" y="0" visible="off" length="short" direction="pas" swaplevel="1" rot="R180"/>
+<pin name="1" x="-5.08" y="0" visible="off" length="short" direction="pas" swaplevel="1"/>
+</symbol>
 </symbols>
 <devicesets>
 <deviceset name="LEDS">
@@ -266,6 +297,40 @@
 <connect gate="G$1" pin="GND" pad="3 TAB"/>
 <connect gate="G$1" pin="SW" pad="4"/>
 <connect gate="G$1" pin="VIN" pad="5"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="INDUCTOR">
+<description>Inductor</description>
+<gates>
+<gate name="G$1" symbol="INDUCTOR" x="0" y="0"/>
+</gates>
+<devices>
+<device name="" package="INDUCTOR">
+<connects>
+<connect gate="G$1" pin="1" pad="1"/>
+<connect gate="G$1" pin="2" pad="2"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="FUSE2920">
+<description>Littelfuse 2920</description>
+<gates>
+<gate name="F1" symbol="FUSE" x="0" y="0"/>
+</gates>
+<devices>
+<device name="" package="2920">
+<connects>
+<connect gate="F1" pin="1" pad="1"/>
+<connect gate="F1" pin="2" pad="2"/>
 </connects>
 <technologies>
 <technology name=""/>
