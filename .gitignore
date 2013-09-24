@@ -37,3 +37,8 @@ nosetests.xml
 # vim backup files
 *.swp
 *~
+
+# eagle backup files
+*.s#*
+*.b#*
+*.l#*
