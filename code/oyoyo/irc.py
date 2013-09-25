@@ -162,7 +162,6 @@ if __name__ == "__main__":
     IvyInit('i3Twitterbot_IRC','[i3Twitterbot_IRC is ready]',0,oncxproc,ondieproc)
     IvyStart('127.255.255.255:2010')
     IvyBindMsg(status_change,'^status=(-?[0-1])')
-#    IvyMainLoop()
     logging.basicConfig(level=logging.INFO)
     cli = IRCClient(MyHandler, host=HOST, port=PORT, nick=NICK,
                 connect_cb=connect_callback)
