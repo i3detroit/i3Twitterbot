@@ -1,18 +1,24 @@
 #!/usr/bin/env python
 from oyoyo.client import IRCClient
+from oyoyo.parse import *
 from oyoyo.cmdhandler import DefaultCommandHandler
 from oyoyo import helpers
 from random import choice
+from ivy.std_api import *
 import string
+import sys
+import copy
 import logging
 
 HOST = 'lug.mtu.edu'
 PORT = 6667
 NICK = 'i3Twitterbot'
 CHANS = ['#botsex',]
+TOPIC_CHANS = copy.deepcopy(CHANS)
 AUTHD = ['agmlego',]
 
-state = 0
+state = -1
+cli = None
 
 greetings = ['Hello','Hi','Good morning','Good afternoon','Good evening','Hey']
 
@@ -22,14 +28,24 @@ help_msg = {
 'part':'Causes the bot to part from a channel',
 'op':'Adds a nick to the authorized operators list',
 'deop':'Removes a nick from the authorized operators list',
+'die':'Kills the bot',
 'help':'Provides help on commands',
 }
+
+def state_text(state):
+    return ('not responding','CLOSED','OPEN')[state+1]
 
 def authed(self,nick,chan):
     isauth = nick in AUTHD
     if not isauth:
         helpers.msg(self.client,chan,'%s: You are not authorized to do that'%nick)
     return isauth
+
+def die(self,nick,chan,msg):
+    global cli
+    if authed(self,nick,chan):
+        IvyStop()
+        sys.exit()
 
 
 def help_cmd(self,nick,chan,msg):
@@ -41,7 +57,7 @@ def help_cmd(self,nick,chan,msg):
         helpers.msg(self.client,chan,'%s: I am a program with limited response capabilities. "%s" is not a command I can help you with. Try asking the right question.'%(nick,msg))
 
 def status(self,nick,chan,msg):
-    helpers.msg(self.client,chan,'%s: The space is %s'%(nick,('not responding','OPEN','CLOSED')[state]))
+    helpers.msg(self.client,chan,'%s: The space is %s'%(nick,state_text(state)))
 
 def add_op(self,nick,chan,msg):
     if authed(self,nick,chan):
@@ -88,13 +104,36 @@ commands = {
 'part':part,
 'op':add_op,
 'deop':del_op,
+'die':die,
 'help':help_cmd,
 }
 
+def status_change(agent, status):
+    global state
+    global cli
+    status = int(status)
+    ns = state_text(status)
+    os = state_text(state)
+    for chan in TOPIC_CHANS:
+        helpers.msg(cli,chan,'The space is now %s'%ns)
+    logging.info('Space went from %s to %s, according to %r'%(os,ns,agent))
+    state = status
+
 def connect_callback(cli):
-    helpers.msg(cli, "NickServ", "IDENTIFY blargitty")
+    helpers.identify(cli,"blargitty")
+    helpers.user(cli,NICK,'i3Detroit Twitterbot Space-status Bot')
     for CHAN in CHANS:
         helpers.join(cli, CHAN)
+
+def oncxproc(agent, connected):
+    if connected == IvyApplicationDisconnected :
+        logging.warning('Ivy application %r was disconnected', agent)
+    else:
+        logging.info('Ivy application %r was connected', agent)
+    logging.debug('Current Ivy applications are [%s]', IvyGetApplicationList())
+
+def ondieproc(agent, id):
+    logging.warning('Received the order to die from %r with id = %d', agent, id)
 
 class MyHandler(DefaultCommandHandler):
     def privmsg(self, nick, chan, msg):
@@ -120,9 +159,13 @@ class MyHandler(DefaultCommandHandler):
         logging.info("%s in %s said: %s" % (nick, chan, msg))
 
 if __name__ == "__main__":
+    IvyInit('i3Twitterbot_IRC','[i3Twitterbot_IRC is ready]',0,oncxproc,ondieproc)
+    IvyStart('127.255.255.255:2010')
+    IvyBindMsg(status_change,'^status=(-?[0-1])')
+#    IvyMainLoop()
     logging.basicConfig(level=logging.INFO)
     cli = IRCClient(MyHandler, host=HOST, port=PORT, nick=NICK,
                 connect_cb=connect_callback)
     conn = cli.connect()
-    while conn.next():
-        pass
+    while True:
+        conn.next()
