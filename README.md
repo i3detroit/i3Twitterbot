@@ -20,3 +20,4 @@ Requirements
 * [phenny](http://inamidst.com/phenny)
 * [py-spi](http://www.gigamegablog.com/2012/09/09/beaglebone-coding-101-spi-output/)
 * [PyBBIO](https://github.com/alexanderhiam/PyBBIO)
+* [ivy-python](http://www.eei.cena.fr/products/ivy/download/checkouts.html)
