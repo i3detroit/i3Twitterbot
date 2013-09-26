@@ -1,5 +1,7 @@
 *.py[cod]
 
+twitterbot.ini
+
 # C extensions
 *.so
 

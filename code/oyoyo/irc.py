@@ -7,15 +7,17 @@ from random import choice
 from ivy.std_api import *
 import string
 import sys
-import copy
 import logging
+from ConfigParser import SafeConfigParser
 
-HOST = 'lug.mtu.edu'
-PORT = 6667
-NICK = 'i3Twitterbot'
-CHANS = ['#botsex',]
-TOPIC_CHANS = copy.deepcopy(CHANS)
-AUTHD = ['agmlego',]
+irclogger = logging.getLogger('IRC')
+
+HOST = None
+PORT = None
+NICK = None
+CHANS = None
+TOPIC_CHANS = None
+AUTHD = None
 
 state = -1
 cli = None
@@ -46,7 +48,6 @@ def die(self,nick,chan,msg):
     if authed(self,nick,chan):
         IvyStop()
         sys.exit()
-
 
 def help_cmd(self,nick,chan,msg):
     if msg == '':
@@ -116,7 +117,7 @@ def status_change(agent, status):
     os = state_text(state)
     for chan in TOPIC_CHANS:
         helpers.msg(cli,chan,'The space is now %s'%ns)
-    logging.info('Space went from %s to %s, according to %r'%(os,ns,agent))
+    irclogger.info('Space went from %s to %s, according to %r'%(os,ns,agent))
     state = status
 
 def connect_callback(cli):
@@ -127,19 +128,19 @@ def connect_callback(cli):
 
 def oncxproc(agent, connected):
     if connected == IvyApplicationDisconnected :
-        logging.warning('Ivy application %r was disconnected', agent)
+        irclogger.warning('Ivy application %r was disconnected', agent)
     else:
-        logging.info('Ivy application %r was connected', agent)
-    logging.debug('Current Ivy applications are [%s]', IvyGetApplicationList())
+        irclogger.info('Ivy application %r was connected', agent)
+    irclogger.debug('Current Ivy applications are [%s]', IvyGetApplicationList())
 
 def ondieproc(agent, id):
-    logging.warning('Received the order to die from %r with id = %d', agent, id)
+    irclogger.warning('Received the order to die from %r with id = %d', agent, id)
 
 class MyHandler(DefaultCommandHandler):
     def privmsg(self, nick, chan, msg):
         if NICK in msg:
             n = nick[:nick.find('!')]
-            logging.info('%s wants to talk with me!'%n)
+            irclogger.info('%s wants to talk with me!'%n)
             cmd = msg.replace(NICK,'').replace(':','').strip()
             idx = cmd.find(' ')
             if idx != -1:
@@ -156,13 +157,24 @@ class MyHandler(DefaultCommandHandler):
                 help_cmd(self,n,chan,cmd.replace('help','').strip())
             else:
                 helpers.msg(self.client,chan,'%s: "%s" is not a command I recognize. I can respond cordially to greetings, or to any of these commands: %s'%(n,cmd,', '.join(commands.keys())))
-        logging.info("%s in %s said: %s" % (nick, chan, msg))
+        irclogger.info("%s in %s said: %s" % (nick, chan, msg))
 
 if __name__ == "__main__":
     IvyInit('i3Twitterbot_IRC','[i3Twitterbot_IRC is ready]',0,oncxproc,ondieproc)
     IvyStart('127.255.255.255:2010')
     IvyBindMsg(status_change,'^status=(-?[0-1])')
-    logging.basicConfig(level=logging.INFO)
+    irclogger.basicConfig(level=logging.INFO)
+
+    config = SafeConfigParser({'access_key':None,'access_secret':None})
+    config.read('twitterbot.ini')
+   
+    HOST = config.get('IRC','server')
+    PORT = config.get('IRC','port')
+    NICK = config.get('IRC','nick')
+    CHANS = config.get('IRC','channels').split(',')
+    TOPIC_CHANS = config.get('IRC','announce').split(',')
+    AUTHD = config.get('IRC','authed_users').split(',')
+
     cli = IRCClient(MyHandler, host=HOST, port=PORT, nick=NICK,
                 connect_cb=connect_callback)
     conn = cli.connect()
