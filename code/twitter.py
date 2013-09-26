@@ -38,6 +38,8 @@ if __name__ == "__main__":
     config = SafeConfigParser({'access_key':None,'access_secret':None})
     config.read('twitterbot.ini')
     
+    twlogger.setLevel(level=getattr(logging,config.get('Twitter','log_level')))
+   
     consumer_key = config.get('Twitter','consumer_key')
     consumer_secret = config.get('Twitter','consumer_secret')
     access_key = config.get('Twitter','access_key')
@@ -51,7 +53,7 @@ if __name__ == "__main__":
             redirect_url = auth.get_authorization_url()
             print 'Go here to get the OAuth PIN! %s'%redirect_url
         except tweepy.TweepError:
-            print 'Error! Failed to get request token.'
+            twlogger.error('Error! Failed to get request token.')
             sys.exit(1)
         
         verifier = raw_input('Verifier: ')
@@ -63,8 +65,8 @@ if __name__ == "__main__":
     
     api = tweepy.API(auth)
     
-    IvyInit('i3Twitterbot_TW','[i3Twitterbot_TW is ready]',0,oncxproc,ondieproc)
-    IvyStart('127.255.255.255:2010')
+    ivy_name = config.get('Twitter','ivy_name')
+    IvyInit(ivy_name,'[%s is ready]'%ivy_name,0,oncxproc,ondieproc)
+    IvyStart(config.get('General','ivy_bus'))
     IvyBindMsg(status_change,'^status=(-?[0-1])')
-    twlogger.basicConfig(level=logging.INFO)
     IvyMainLoop()

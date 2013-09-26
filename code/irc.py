@@ -15,6 +15,8 @@ irclogger = logging.getLogger('IRC')
 HOST = None
 PORT = None
 NICK = None
+NAME = None
+IDENT = None
 CHANS = None
 TOPIC_CHANS = None
 AUTHD = None
@@ -28,6 +30,8 @@ help_msg = {
 'status':'Prints out the current state of the space',
 'join':'Causes the bot to join a channel',
 'part':'Causes the bot to part from a channel',
+'announce':'Adds the channel given to the list in which status changes are announced'
+'deannounce':'Removess the channel given from the list in which status changes are announced'
 'op':'Adds a nick to the authorized operators list',
 'deop':'Removes a nick from the authorized operators list',
 'die':'Kills the bot',
@@ -64,6 +68,7 @@ def add_op(self,nick,chan,msg):
     if authed(self,nick,chan):
         if msg not in AUTHD:
             AUTHD.append(msg)
+            config.set('IRC','authed_users',','.join(AUTHD))
             helpers.msg(self.client,chan,'%s: OK, I added %s as a bot operator'%(nick,msg))
         elif msg == nick:
             helpers.msg(self.client,chan,'%s: Um...you already are an operator...'%(nick))
@@ -75,6 +80,7 @@ def del_op(self,nick,chan,msg):
     if authed(self,nick,chan):
         if msg in AUTHD:
             AUTHD.remove(msg)
+            config.set('IRC','authed_users',','.join(AUTHD))
             helpers.msg(self.client,chan,'%s: OK, I removed %s as a bot operator'%(nick,msg))
         else:
             helpers.msg(self.client,chan,'%s: Um...%s is not a bot operator...'%(nick,msg))
@@ -83,6 +89,7 @@ def join(self,nick,chan,msg):
     if authed(self,nick,chan):
         if msg not in CHANS:
             CHANS.append(msg)
+            config.set('IRC','channels',','.join(CHANS))
             helpers.join(cli, msg)
             helpers.msg(self.client,chan,'%s: OK, I joined %s'%(nick,msg))
         elif msg == chan:
@@ -94,15 +101,36 @@ def part(self,nick,chan,msg):
     if authed(self,nick,chan):
         if msg in CHANS:
             CHANS.remove(msg)
+            config.set('IRC','channels',','.join(CHANS))
             helpers.part(cli, msg)
             helpers.msg(self.client,chan,'%s: OK, I parted %s'%(nick,msg))
         else:
             helpers.msg(self.client,chan,'%s: Um...I am not in %s...'%(nick,msg))
 
+def announce(self,nick,chan,msg):
+    if authed(self,nick,chan):
+        if msg not in TOPIC_CHANS:
+            TOPIC_CHANS.append(msg)
+            config.set('IRC','announce',','.join(TOPIC_CHANS))
+            helpers.msg(self.client,chan,'%s: OK, I will announce status changes in %s'%(nick,msg))
+        else:
+            helpers.msg(self.client,chan,'%s: Um...I am *already* announcing status changes in %s...'%(nick,msg))
+
+def deannounce(self,nick,chan,msg):
+    if authed(self,nick,chan):
+        if msg in TOPIC_CHANS:
+            TOPIC_CHANS.remove(msg)
+            config.set('IRC','announce',','.join(TOPIC_CHANS))
+            helpers.msg(self.client,chan,'%s: OK, I will stop announcing status changes in %s'%(nick,msg))
+        else:
+            helpers.msg(self.client,chan,'%s: Um...I am not announcing status changes in %s...'%(nick,msg))
+
 commands = {
 'status':status,
 'join':join,
 'part':part,
+'announce':announce,
+'deannounce':deannounce,
 'op':add_op,
 'deop':del_op,
 'die':die,
@@ -121,8 +149,9 @@ def status_change(agent, status):
     state = status
 
 def connect_callback(cli):
-    helpers.identify(cli,"blargitty")
-    helpers.user(cli,NICK,'i3Detroit Twitterbot Space-status Bot')
+    if IDENT:
+        helpers.identify(cli,IDENT)
+    helpers.user(cli,NICK,NAME)
     for CHAN in CHANS:
         helpers.join(cli, CHAN)
 
@@ -160,17 +189,21 @@ class MyHandler(DefaultCommandHandler):
         irclogger.info("%s in %s said: %s" % (nick, chan, msg))
 
 if __name__ == "__main__":
-    IvyInit('i3Twitterbot_IRC','[i3Twitterbot_IRC is ready]',0,oncxproc,ondieproc)
-    IvyStart('127.255.255.255:2010')
-    IvyBindMsg(status_change,'^status=(-?[0-1])')
-    irclogger.basicConfig(level=logging.INFO)
-
-    config = SafeConfigParser({'access_key':None,'access_secret':None})
+    config = SafeConfigParser({'identify':None})
     config.read('twitterbot.ini')
    
+    ivy_name = config.get('IRC','ivy_name')
+    IvyInit(ivy_name,'[%s is ready]'%ivy_name,0,oncxproc,ondieproc)
+    IvyStart(config.get('General','ivy_bus'))
+    IvyBindMsg(status_change,'^status=(-?[0-1])')
+
+    irclogger.setLevel(level=getattr(logging,config.get('IRC','log_level')))
+
     HOST = config.get('IRC','server')
     PORT = config.get('IRC','port')
     NICK = config.get('IRC','nick')
+    NAME = config.get('IRC','name')
+    IDENT = config.get('IRC','identify')
     CHANS = config.get('IRC','channels').split(',')
     TOPIC_CHANS = config.get('IRC','announce').split(',')
     AUTHD = config.get('IRC','authed_users').split(',')
