@@ -7,6 +7,7 @@ from ivy.std_api import *
 import logging
 import time
 from datetime import datetime, timedelta
+from ConfigParser import SafeConfigParser
 
 hwlogger = logging.getLogger('HW_IRQ')
 
@@ -42,8 +43,7 @@ def led_change():
         led_change.oldstate = -1
         led_change.oldtime = datetime.min
     state = digitalRead(SWITCH)
-    if led_change.oldstate != state and (datetime.now() - led_change.oldtime) >
-    timedelta(milliseconds=DEBOUNCE):
+    if led_change.oldstate != state and (datetime.now() - led_change.oldtime) > timedelta(milliseconds=DEBOUNCE):
         hwlogger.info('The space is %s'%('OPEN','CLOSED')[state])
         digitalWrite(GREEN_LED, state)
         digitalWrite(RED_LED, not state)

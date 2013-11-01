@@ -30,8 +30,8 @@ help_msg = {
 'status':'Prints out the current state of the space',
 'join':'Causes the bot to join a channel',
 'part':'Causes the bot to part from a channel',
-'announce':'Adds the channel given to the list in which status changes are announced'
-'deannounce':'Removess the channel given from the list in which status changes are announced'
+'announce':'Adds the channel given to the list in which status changes are announced',
+'deannounce':'Removes the channel given from the list in which status changes are announced',
 'op':'Adds a nick to the authorized operators list',
 'deop':'Removes a nick from the authorized operators list',
 'die':'Kills the bot',
@@ -200,7 +200,7 @@ if __name__ == "__main__":
     irclogger.setLevel(level=getattr(logging,config.get('IRC','log_level')))
 
     HOST = config.get('IRC','server')
-    PORT = config.get('IRC','port')
+    PORT = int(config.get('IRC','port'))
     NICK = config.get('IRC','nick')
     NAME = config.get('IRC','name')
     IDENT = config.get('IRC','identify')
