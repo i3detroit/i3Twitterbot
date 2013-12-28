@@ -13,7 +13,7 @@ hwlogger = logging.getLogger('HW_IRQ')
 
 GREEN_LED = GPIO2_6
 RED_LED = GPIO2_7
-SWITCH = GPIO2_9
+SWITCH = GPIO0_7
 DEBOUNCE = 200
 
 interested = None
