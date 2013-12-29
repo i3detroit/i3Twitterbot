@@ -6,7 +6,7 @@
 <setting alwaysvectorfont="no"/>
 <setting verticaltext="up"/>
 </settings>
-<grid distance="0.1" unitdist="inch" unit="inch" style="lines" multiple="1" display="no" altdistance="0.01" altunitdist="inch" altunit="inch"/>
+<grid distance="0.05" unitdist="inch" unit="inch" style="lines" multiple="1" display="no" altdistance="0.01" altunitdist="inch" altunit="inch"/>
 <layers>
 <layer number="1" name="Top" color="4" fill="1" visible="no" active="no"/>
 <layer number="16" name="Bottom" color="1" fill="1" visible="no" active="no"/>
@@ -20382,13 +20382,6 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <junction x="25.4" y="12.7"/>
 </segment>
 </net>
-<net name="MOSI" class="0">
-<segment>
-<pinref part="DISP" gate="G$1" pin="MOSI"/>
-<pinref part="U$1" gate="G$1" pin="SPI1_DO"/>
-<wire x1="-119.38" y1="27.94" x2="-101.6" y2="27.94" width="0.1524" layer="91"/>
-</segment>
-</net>
 <net name="SCLK" class="0">
 <segment>
 <pinref part="DISP" gate="G$1" pin="SCLK"/>
@@ -20494,10 +20487,10 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <net name="SW" class="0">
 <segment>
 <pinref part="R3" gate="G$1" pin="2"/>
-<wire x1="-3.81" y1="85.09" x2="-21.59" y2="85.09" width="0.1524" layer="91"/>
-<wire x1="-21.59" y1="85.09" x2="-21.59" y2="76.2" width="0.1524" layer="91"/>
-<pinref part="U$1" gate="G$1" pin="GPIO2_9"/>
-<wire x1="-21.59" y1="76.2" x2="-45.72" y2="76.2" width="0.1524" layer="91"/>
+<wire x1="-3.81" y1="85.09" x2="-33.02" y2="85.09" width="0.1524" layer="91"/>
+<wire x1="-33.02" y1="85.09" x2="-33.02" y2="12.7" width="0.1524" layer="91"/>
+<pinref part="U$1" gate="G$1" pin="GPIO0_7"/>
+<wire x1="-33.02" y1="12.7" x2="-45.72" y2="12.7" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="12V_FUSE" class="0">
@@ -20654,6 +20647,16 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <pinref part="WP" gate="G$1" pin="TP"/>
 <wire x1="1.27" y1="27.94" x2="5.08" y2="27.94" width="0.1524" layer="91"/>
 <junction x="5.08" y="27.94"/>
+</segment>
+</net>
+<net name="N$4" class="0">
+<segment>
+<pinref part="DISP" gate="G$1" pin="MOSI"/>
+<wire x1="-119.38" y1="27.94" x2="-106.68" y2="27.94" width="0.1524" layer="91"/>
+<wire x1="-106.68" y1="27.94" x2="-106.68" y2="29.21" width="0.1524" layer="91"/>
+<pinref part="U$1" gate="G$1" pin="SPI1_DI"/>
+<wire x1="-106.68" y1="29.21" x2="-45.72" y2="29.21" width="0.1524" layer="91"/>
+<wire x1="-45.72" y1="29.21" x2="-45.72" y2="27.94" width="0.1524" layer="91"/>
 </segment>
 </net>
 </nets>

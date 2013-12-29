@@ -6,7 +6,7 @@
 <setting alwaysvectorfont="no"/>
 <setting verticaltext="up"/>
 </settings>
-<grid distance="1" unitdist="mil" unit="mil" style="lines" multiple="1" display="no" altdistance="0.025" altunitdist="inch" altunit="inch"/>
+<grid distance="5" unitdist="mil" unit="mil" style="lines" multiple="1" display="no" altdistance="0.025" altunitdist="inch" altunit="inch"/>
 <layers>
 <layer number="1" name="Top" color="4" fill="1" visible="yes" active="yes"/>
 <layer number="16" name="Bottom" color="1" fill="1" visible="yes" active="yes"/>
@@ -137,8 +137,8 @@
 <text x="44.45" y="34.29" size="0.6096" layer="121" font="vector" rot="R180" align="center-left">TXO</text>
 <text x="13.97" y="81.28" size="0.6096" layer="121" font="vector" align="top-center">0x60</text>
 <text x="25.4" y="44.7675" size="0.6096" layer="121" font="vector" align="top-center">0x78</text>
-<text x="39.6875" y="81.5975" size="0.6096" layer="121" font="vector" align="top-center">GND</text>
-<text x="38.735" y="76.835" size="0.6096" layer="121" font="vector" align="top-center">7-30VDC
+<text x="37.4015" y="81.5975" size="0.6096" layer="121" font="vector" align="top-center">GND</text>
+<text x="36.449" y="76.835" size="0.6096" layer="121" font="vector" align="top-center">7-30VDC
 &lt;=3A</text>
 <text x="21.59" y="37.7825" size="0.6096" layer="121" font="vector" rot="R90" align="top-center">A1 A0 ADDR</text>
 <text x="28.8925" y="31.75" size="0.6096" layer="51" font="vector" align="top-center">A0</text>
@@ -2578,9 +2578,9 @@ Please make sure your boards conform to these design rules.</description>
 <element name="U$3" library="Twitterbot" package="1X3" value="SWITCH" x="45.72" y="44.45" smashed="yes">
 <attribute name="VALUE" x="47.625" y="44.45" size="0.6096" layer="121" font="vector" rot="R90" align="top-center"/>
 </element>
-<element name="PWR" library="SparkFun" package="SCREWTERMINAL-5MM-2" value="" x="45.085" y="76.2" smashed="yes" rot="R90">
-<attribute name="NAME" x="48.895" y="78.74" size="0.6096" layer="25" font="vector" rot="R90" align="top-center"/>
-<attribute name="VALUE" x="43.815" y="74.93" size="0.4064" layer="27" rot="R90"/>
+<element name="PWR" library="SparkFun" package="SCREWTERMINAL-5MM-2" value="" x="42.799" y="76.2" smashed="yes" rot="R90">
+<attribute name="NAME" x="46.609" y="78.74" size="0.6096" layer="25" font="vector" rot="R90" align="top-center"/>
+<attribute name="VALUE" x="41.529" y="74.93" size="0.4064" layer="27" rot="R90"/>
 </element>
 <element name="TTL" library="SparkFun" package="1X03_LOCK" value="" x="45.72" y="34.29" smashed="yes" rot="R270">
 <attribute name="NAME" x="47.5488" y="31.8262" size="0.6096" layer="121" font="vector" ratio="10" rot="R90" align="top-center"/>
@@ -2737,16 +2737,6 @@ Please make sure your boards conform to these design rules.</description>
 <wire x1="51.435" y1="33.02" x2="46.863" y2="33.02" width="0.254" layer="1"/>
 <wire x1="46.863" y1="33.02" x2="45.593" y2="31.75" width="0.254" layer="1"/>
 </signal>
-<signal name="MOSI">
-<contactref element="DISP" pad="P$4"/>
-<contactref element="U$1" pad="75"/>
-<wire x1="52.705" y1="54.61" x2="51.435" y2="53.34" width="0.254" layer="1"/>
-<wire x1="51.435" y1="53.34" x2="45.085" y2="53.34" width="0.254" layer="1"/>
-<wire x1="45.085" y1="53.34" x2="44.1325" y2="54.2925" width="0.254" layer="1"/>
-<wire x1="44.1325" y1="54.2925" x2="44.1325" y2="56.1975" width="0.254" layer="1"/>
-<wire x1="44.1325" y1="56.1975" x2="45.085" y2="57.15" width="0.254" layer="1"/>
-<wire x1="45.085" y1="57.15" x2="45.72" y2="57.15" width="0.254" layer="1"/>
-</signal>
 <signal name="SCLK">
 <contactref element="DISP" pad="P$3"/>
 <contactref element="U$1" pad="77"/>
@@ -2840,13 +2830,12 @@ Please make sure your boards conform to these design rules.</description>
 </signal>
 <signal name="SW">
 <contactref element="R3" pad="2"/>
-<contactref element="U$1" pad="44"/>
-<wire x1="40.425" y1="44.45" x2="36.195" y2="44.45" width="0.254" layer="1"/>
-<wire x1="36.195" y1="44.45" x2="31.115" y2="49.53" width="0.254" layer="1"/>
-<via x="31.115" y="49.53" extent="1-16" drill="0.6"/>
-<wire x1="31.115" y1="49.53" x2="9.525" y2="71.12" width="0.254" layer="16"/>
-<wire x1="9.525" y1="71.12" x2="3.175" y2="71.12" width="0.254" layer="16"/>
-<wire x1="3.175" y1="71.12" x2="1.905" y2="72.39" width="0.254" layer="16"/>
+<contactref element="U$1" pad="88"/>
+<wire x1="40.425" y1="44.45" x2="40.425" y2="59.475" width="0.254" layer="1"/>
+<wire x1="40.425" y1="59.475" x2="44.45" y2="63.5" width="0.254" layer="1"/>
+<wire x1="44.45" y1="63.5" x2="44.45" y2="68.199" width="0.254" layer="1"/>
+<wire x1="44.45" y1="68.199" x2="46.101" y2="69.85" width="0.254" layer="1"/>
+<wire x1="46.101" y1="69.85" x2="50.165" y2="69.85" width="0.254" layer="1"/>
 </signal>
 <signal name="12V_FUSE">
 <contactref element="5VREG" pad="1"/>
@@ -2865,7 +2854,7 @@ Please make sure your boards conform to these design rules.</description>
 <signal name="12VDC">
 <contactref element="F1" pad="1"/>
 <contactref element="PWR" pad="1"/>
-<wire x1="45.085" y1="76.2" x2="30.48" y2="76.2" width="1.016" layer="16"/>
+<wire x1="42.799" y1="76.2" x2="30.48" y2="76.2" width="1.016" layer="16"/>
 <wire x1="30.48" y1="76.2" x2="26.035" y2="80.645" width="1.016" layer="16"/>
 <wire x1="26.035" y1="80.645" x2="15.367" y2="80.645" width="1.016" layer="16"/>
 </signal>
@@ -3013,6 +3002,16 @@ Please make sure your boards conform to these design rules.</description>
 <wire x1="41.0175" y1="37.7825" x2="42.8625" y2="37.7825" width="0.254" layer="1"/>
 <wire x1="42.8625" y1="37.7825" x2="43.4975" y2="38.4175" width="0.254" layer="1"/>
 <wire x1="43.4975" y1="38.4175" x2="43.4975" y2="39.37" width="0.254" layer="1"/>
+</signal>
+<signal name="N$4">
+<contactref element="DISP" pad="P$4"/>
+<contactref element="U$1" pad="76"/>
+<wire x1="45.72" y1="57.15" x2="44.704" y2="57.15" width="0.254" layer="1"/>
+<wire x1="44.704" y1="57.15" x2="43.942" y2="56.388" width="0.254" layer="1"/>
+<wire x1="43.942" y1="56.388" x2="43.942" y2="54.102" width="0.254" layer="1"/>
+<wire x1="43.942" y1="54.102" x2="44.704" y2="53.34" width="0.254" layer="1"/>
+<wire x1="44.704" y1="53.34" x2="48.895" y2="53.34" width="0.254" layer="1"/>
+<wire x1="48.895" y1="53.34" x2="50.165" y2="54.61" width="0.254" layer="1"/>
 </signal>
 </signals>
 </board>
