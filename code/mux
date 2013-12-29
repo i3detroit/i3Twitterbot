@@ -1,0 +1,3 @@
+#!/bin/bash
+echo 6 > /sys/kernel/debug/omap_mux/gpmc_wpn
+echo 26 > /sys/kernel/debug/omap_mux/gpmc_wait0
