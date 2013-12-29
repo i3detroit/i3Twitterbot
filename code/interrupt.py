@@ -8,7 +8,7 @@ import logging
 import time
 from datetime import datetime, timedelta
 from ConfigParser import SafeConfigParser
-
+logging.basicConfig()
 hwlogger = logging.getLogger('HW_IRQ')
 
 GREEN_LED = GPIO2_6
@@ -24,7 +24,7 @@ def oncxproc(agent, connected):
     if connected == IvyApplicationDisconnected :
         hwlogger.warning('Ivy application %r was disconnected', agent)
     else:
-        name = agent[agent.find('(')+1:agent.find(')')]
+        name = agent.agent_name#agent['agent_name'][agent['agent_name'].find('(')+1:agent['agent_name'].find(')')]
         hwlogger.info('Ivy application %r was connected', agent)
         if name in interested:
             IvySendMsg('status=%1d'%state)
@@ -49,6 +49,7 @@ def led_change():
         digitalWrite(RED_LED, not state)
         led_change.oldstate = state
         led_change.oldtime = datetime.now()
+        IvySendMsg('status=%1d'%state)
 
 def setup():
     pinMode(GREEN_LED, OUTPUT)
@@ -68,7 +69,7 @@ if __name__ == "__main__":
     IvyStart(config.get('General','ivy_bus'))
     IvyBindMsg(status_req,'^status\?')
     hwlogger.setLevel(level=getattr(logging,config.get('Hardware','log_level')))
-    DEBOUNCE = config.get('Hardware','debounce')
+    DEBOUNCE = int(config.get('Hardware','debounce'))
     interested = []
     for client in config.get('Hardware','interested').split(','):
         interested.append(config.get(client,'ivy_name'))
