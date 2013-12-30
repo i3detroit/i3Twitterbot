@@ -1,10 +1,12 @@
 #!/usr/bin/env python
 import sys
 import tweepy
+from datetime import datetime
 from ivy.std_api import *
 from ConfigParser import SafeConfigParser
 import logging
 
+logging.basicConfig()
 twlogger = logging.getLogger('Twitter')
 
 state = -1
@@ -20,7 +22,7 @@ def status_change(agent, status):
     status = int(status)
     ns = state_text(status)
     os = state_text(state)
-    api.update_status('The space is now %s'%ns)
+    api.update_status('At %s, the space is now %s'%(datetime.now(),ns))
     twlogger.info('Space went from %s to %s, according to %r'%(os,ns,agent))
     state = status
 

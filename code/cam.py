@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 
 import urllib2
+from time import sleep
+from datetime import datetime,timedelta
 from ivy.std_api import *
 from ConfigParser import SafeConfigParser
 import logging
@@ -21,24 +23,24 @@ def status_change(agent, status):
     status = int(status)
     ns = state_text(status)
     os = state_text(state)
-
-    # countdown
-    start = datetime.now()
-    now = datetime.now()
-    delta = timedelta(second=CAMTIME)
-    camlogger.info('Starting countdown of %d seconds!'%CAMTIME)
-    diff = now - start
-    while diff < delta:
-        sendNum((CAMTIME-diff.second)*100+99-(diff.microsecond/10000),high_dot=True)
-        sleep(0.01)
+    if status == 1:
+        # countdown
+        start = datetime.now()
         now = datetime.now()
+        delta = timedelta(seconds=CAMTIME)
+        camlogger.info('Starting countdown of %d seconds!'%CAMTIME)
         diff = now - start
-
-    img = urllib2.urlopen(CAMURL).read()
-    camlogger.info('Camera image saved!')
-    with open('twitpic.jpg','wb') as f:
-        f.write(img)
-        IvySendMsg('newpic')
+        while diff < delta:
+            led.sendNum((CAMTIME-1-diff.seconds)*100+99-(diff.microseconds/10000),high_dot=True)
+            sleep(0.01)
+            now = datetime.now()
+            diff = now - start
+    
+        img = urllib2.urlopen(CAMURL).read()
+        camlogger.info('Camera image saved!')
+        with open('twitpic.jpg','wb') as f:
+            f.write(img)
+            IvySendMsg('newpic')
     camlogger.info('Space went from %s to %s, according to %r'%(os,ns,agent))
     state = status
 
@@ -69,10 +71,12 @@ if __name__ == "__main__":
     led.initDisplay()
     while True:
         t = datetime.now()
-        if t.second/10 < 5:
+        if t.second%10 < 5:
             # show time
+            #print 'Time %02d:%02d:%02d'%(t.hour,t.minute,t.second)
             led.sendNum(t.hour*100+t.minute,low_dot=True,high_dot=True)
         else:
             # show date
+            #print 'Date %04d-%02d-%02d'%(t.year,t.month,t.day)
             led.sendNum(t.month*100+t.day,low_dot=True,high_dot=False)
         sleep(1)

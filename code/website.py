@@ -19,6 +19,8 @@ port = None
 filepath = None
 filename = None
 
+state = -1
+
 def state_text(state):
     return ('not responding','CLOSED','OPEN')[state+1]
 
@@ -45,7 +47,7 @@ def status_change(agent, status):
     except Exception, e:
         weblogger.error('Exception %s'%e)
 
-def picture_change(agent, status):
+def picture_change(agent):
     try:
         t = paramiko.Transport((hostname, port))                                    
         t.connect(username=username, password=password)

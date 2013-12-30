@@ -36,7 +36,7 @@ ivy_name=i3Twitterbot_CAM
 log_level=INFO
 camuser=<<<REPLACE>>>
 campass=<<<REPLACE>>>
-camurl=http://Twittercam.i3detroit.local/cgi-bin/encoder?USER=%(camuser)&PWD=%(campass)&SNAPSHOT
+camurl=http://Twittercam.i3detroit.local/cgi-bin/encoder?USER=%(camuser)s&PWD=%(campass)s&SNAPSHOT
 countdown=15
 
 [Hardware]

@@ -45,7 +45,7 @@ font = {    0:  0xFC,
 
 def fixEndian(b):
     fbyte = int('{:08b}'.format(b)[::-1],2)
-    #print 'Flipped: %02X -> %02X'%(b,fbyte)
+    ##print 'Flipped: %02X -> %02X'%(b,fbyte)
     return fbyte
 
 def initDisplay():
@@ -53,27 +53,27 @@ def initDisplay():
     sendCmd(_AUTO_INCREMENT)
     initRAM()
     sendCmd(_DISPLAY_14_16)
-    print 'Init Display'
+    #print 'Init Display'
 
 def initRAM():
     port.writebytes([fixEndian(0xC0)] + [0x00] * 8)
-    print 'Init RAM'
+    #print 'Init RAM'
 
 def sendCmd(cmd):
     port.writebytes([fixEndian(cmd)])
-    print 'Sending CMD %s'%cmd
+    #print 'Sending CMD %s'%cmd
 
 def sendCmds(*cmds):
     port.writebytes(map(fixEndian,cmds))
-    print 'Sending CMDs %s'%str(cmds)
+    #print 'Sending CMDs %s'%str(cmds)
 
 def sendDigit(digit,val):
     port.writebytes([fixEndian(addresses[digit]),font[val]])
-    print 'Sending digit %s value %s'%(digit,val)
+    #print 'Sending digit %s value %s'%(digit,val)
 
 def sendNum(num,low_dot=False,high_dot=False):
     digits = map(int,'%04d'%num)
-    print 'Sending %s as %s (%s %s)'%(num,digits,('no low','low')[low_dot],('no high','high')[high_dot])
+    #print 'Sending %s as %s (%s %s)'%(num,digits,('no low','low')[low_dot],('no high','high')[high_dot])
     sendDigits(digits,low_dot,high_dot)
 
 def sendDigits(digits,low_dot=False,high_dot=False):
@@ -86,7 +86,7 @@ def sendDigits(digits,low_dot=False,high_dot=False):
     for addr,digit in zip(addresses,digits):
         d.append(fixEndian(addr))
         d.append(digit)
-    print 'Sending %s as %s'%(digits,d)
+    #print 'Sending %s as %s'%(digits,d)
     port.writebytes(d)
 
 if __name__ == "__main__":
@@ -94,7 +94,7 @@ if __name__ == "__main__":
     initDisplay()
     while True:
         t = datetime.now()
-        print t
+        #print t
         if t.second/30:
             if t.second%10 in xrange(10/2):
                 sendNum(t.hour*100+t.minute,low_dot=True,high_dot=True)

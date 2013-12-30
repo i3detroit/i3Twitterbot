@@ -49,7 +49,7 @@ def led_change():
         digitalWrite(RED_LED, not state)
         led_change.oldstate = state
         led_change.oldtime = datetime.now()
-        IvySendMsg('status=%1d'%state)
+        IvySendMsg('status=%1d'%(1-state))
 
 def setup():
     pinMode(GREEN_LED, OUTPUT)
