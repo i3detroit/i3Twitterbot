@@ -42,5 +42,5 @@ countdown=15
 [Hardware]
 ivy_name=i3Twitterbot_HW
 log_level=INFO
-interested=IRC,Twitter,Website
+interested=IRC,Twitter,Website,Camera
 debounce=200
