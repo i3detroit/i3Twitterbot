@@ -1,0 +1,43 @@
+[General]
+ivy_bus=127.255.255.255:2010
+
+[Twitter]
+ivy_name=i3Twitterbot_TW
+log_level=INFO
+consumer_key=<<<REPLACE ME>>>
+consumer_secret=<<<REPLACE ME>>>
+access_key=<<<REPLACE ME>>>
+access_secret=<<<REPLACE ME>>>
+
+[IRC]
+ivy_name=i3Twitterbot_IRC
+log_level=INFO
+nick=i3Twitterbot
+name=Space-status utility bot
+identify=
+server=irc.freenode.net
+port=6667
+channels=#botsex
+announce=#botsex
+authed_users=admin
+
+[Website]
+ivy_name=i3Twitterbot_WEB
+log_level=INFO
+username=<<<REPLACE ME>>>
+password=<<<REPLACE ME>>>
+hostname=<<<REPLACE ME>>>
+port=22
+filepath=/var/www/
+filename=doorbot_status
+
+[Camera]
+ivy_name=i3Twitterbot_CAM
+log_level=INFO
+countdown=30
+
+[Hardware]
+ivy_name=i3Twitterbot_HW
+log_level=INFO
+interested=IRC,Twitter,Website
+debounce=200
