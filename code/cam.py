@@ -4,11 +4,13 @@ import urllib2
 from ivy.std_api import *
 from ConfigParser import SafeConfigParser
 import logging
+import PT6961 as led
 
 logging.basicConfig()
 camlogger = logging.getLogger('Camera')
 
 CAMURL = None
+CAMTIME = None
 state = -1
 
 def state_text(state):
@@ -19,7 +21,21 @@ def status_change(agent, status):
     status = int(status)
     ns = state_text(status)
     os = state_text(state)
+
+    # countdown
+    start = datetime.now()
+    now = datetime.now()
+    delta = timedelta(second=CAMTIME)
+    camlogger.info('Starting countdown of %d seconds!'%CAMTIME)
+    diff = now - start
+    while diff < delta:
+        sendNum((CAMTIME-diff.second)*100+99-(diff.microsecond/10000),high_dot=True)
+        sleep(0.01)
+        now = datetime.now()
+        diff = now - start
+
     img = urllib2.urlopen(CAMURL).read()
+    camlogger.info('Camera image saved!')
     with open('twitpic.jpg','wb') as f:
         f.write(img)
         IvySendMsg('newpic')
@@ -36,16 +52,27 @@ def oncxproc(agent, connected):
 def ondieproc(agent, id):
     camlogger.warning('Received the order to die from %r with id = %d', agent, id)
 
-
 if __name__ == "__main__":
     config = SafeConfigParser()
     config.read('twitterbot.ini')
 
     camlogger.setLevel(level=getattr(logging,config.get('Camera','log_level')))
     CAMURL = config.get('Camera','camurl')
+    CAMTIME = int(config.get('Camera','countdown'))
 
     ivy_name = config.get('Camera','ivy_name')
     IvyInit(ivy_name,'[%s is ready]'%ivy_name,0,oncxproc,ondieproc)
     IvyStart(config.get('General','ivy_bus'))
     IvyBindMsg(status_change,'^status=(-?[0-1])')
-    IvyMainLoop()
+
+    led.port.msh = 12000000
+    led.initDisplay()
+    while True:
+        t = datetime.now()
+        if t.second/10 < 5:
+            # show time
+            led.sendNum(t.hour*100+t.minute,low_dot=True,high_dot=True)
+        else:
+            # show date
+            led.sendNum(t.month*100+t.day,low_dot=True,high_dot=False)
+        sleep(1)
