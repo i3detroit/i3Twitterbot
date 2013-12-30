@@ -45,6 +45,15 @@ def status_change(agent, status):
     except Exception, e:
         weblogger.error('Exception %s'%e)
 
+def picture_change(agent, status):
+    try:
+        t = paramiko.Transport((hostname, port))                                    
+        t.connect(username=username, password=password)
+        sftp = paramiko.SFTPClient.from_transport(t)
+        sftp.put('twitpic.jpg',join(filepath,'twitpic.jpg'))
+    except Exception, e:
+        weblogger.error('Exception %s'%e)
+
 def oncxproc(agent, connected):
     if connected == IvyApplicationDisconnected :
         weblogger.warning('Ivy application %r was disconnected', agent)
@@ -73,4 +82,5 @@ if __name__ == "__main__":
     IvyInit(ivy_name,'[%s is ready]'%ivy_name,0,oncxproc,ondieproc)
     IvyStart(config.get('General','ivy_bus'))
     IvyBindMsg(status_change,'^status=(-?[0-1])')
+    IvyBindMsg(picture_change,'^newpic')
     IvyMainLoop()

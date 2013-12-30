@@ -34,7 +34,10 @@ filename=doorbot_status
 [Camera]
 ivy_name=i3Twitterbot_CAM
 log_level=INFO
-countdown=30
+camuser=<<<REPLACE>>>
+campass=<<<REPLACE>>>
+camurl=http://Twittercam.i3detroit.local/cgi-bin/encoder?USER=%(camuser)&PWD=%(campass)&SNAPSHOT
+countdown=15
 
 [Hardware]
 ivy_name=i3Twitterbot_HW

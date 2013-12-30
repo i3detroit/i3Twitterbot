@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # GPIO2_6 is green (open) LED, active low
 # GPIO2_7 is red (closed) LED, active low
-# GPIO2_9 is switch, low for open
+# GPIO0_9 is switch, low for open
 from bbio import *
 from ivy.std_api import *
 import logging
