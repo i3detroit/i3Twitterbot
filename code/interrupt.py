@@ -5,11 +5,13 @@
 from bbio import *
 from ivy.std_api import *
 import logging
+import logging.config
 import time
 from datetime import datetime, timedelta
 from ConfigParser import SafeConfigParser
-logging.basicConfig()
-hwlogger = logging.getLogger('HW_IRQ')
+
+logging.config.fileConfig('conf/twitterbot.log.ini')
+hwlogger = logging.getLogger('Twitterbot.hardware')
 
 GREEN_LED = GPIO2_6
 RED_LED = GPIO2_7
@@ -62,7 +64,7 @@ def loop():
 
 if __name__ == "__main__":
     config = SafeConfigParser()
-    config.read('twitterbot.ini')
+    config.read('conf/twitterbot.ini')
    
     ivy_name = config.get('Hardware','ivy_name')
     IvyInit(ivy_name,'[%s is ready]'%ivy_name,0,oncxproc,ondieproc)

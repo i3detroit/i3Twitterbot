@@ -5,12 +5,14 @@ import string
 import sys
 from os.path import join
 import logging
+import logging.config
 from ConfigParser import SafeConfigParser
 import paramiko
 import sys
 import traceback
-logging.basicConfig()
-weblogger = logging.getLogger('WEB')
+
+logging.config.fileConfig('conf/twitterbot.log.ini')
+weblogger = logging.getLogger('Twitterbot.website')
 
 username = None
 password = None
@@ -45,7 +47,7 @@ def status_change(agent, status):
     
         sftp.open(join(filepath,filename), 'w').write(('closed','open')[state])
     except Exception, e:
-        weblogger.error('Exception %s'%e)
+        weblogger.exception('Exception %s'%e)
 
 def picture_change(agent):
     try:
@@ -54,7 +56,7 @@ def picture_change(agent):
         sftp = paramiko.SFTPClient.from_transport(t)
         sftp.put('twitpic.jpg',join(filepath,'twitpic.jpg'))
     except Exception, e:
-        weblogger.error('Exception %s'%e)
+        weblogger.exception('Exception %s'%e)
 
 def oncxproc(agent, connected):
     if connected == IvyApplicationDisconnected :
@@ -69,7 +71,7 @@ def ondieproc(agent, id):
 
 if __name__ == "__main__":
     config = SafeConfigParser()
-    config.read('twitterbot.ini')
+    config.read('conf/twitterbot.ini')
 
     weblogger.setLevel(level=getattr(logging,config.get('Website','log_level')))
 

@@ -8,9 +8,11 @@ from ivy.std_api import *
 import string
 import sys
 import logging
+import logging.config
 from ConfigParser import SafeConfigParser
 
-irclogger = logging.getLogger('IRC')
+logging.config.fileConfig('conf/twitterbot.log.ini')
+irclogger = logging.getLogger('Twitterbot.IRC')
 
 HOST = None
 PORT = None
@@ -190,7 +192,7 @@ class MyHandler(DefaultCommandHandler):
 
 if __name__ == "__main__":
     config = SafeConfigParser({'identify':None})
-    config.read('twitterbot.ini')
+    config.read('conf/twitterbot.ini')
    
     ivy_name = config.get('IRC','ivy_name')
     IvyInit(ivy_name,'[%s is ready]'%ivy_name,0,oncxproc,ondieproc)

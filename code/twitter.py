@@ -5,9 +5,10 @@ from datetime import datetime
 from ivy.std_api import *
 from ConfigParser import SafeConfigParser
 import logging
+import logging.config
 
-logging.basicConfig()
-twlogger = logging.getLogger('Twitter')
+logging.config.fileConfig('conf/twitterbot.log.ini')
+twlogger = logging.getLogger('Twitterbot.Twitter')
 
 state = -1
 
@@ -38,7 +39,7 @@ def ondieproc(agent, id):
 
 if __name__ == "__main__":
     config = SafeConfigParser({'access_key':None,'access_secret':None})
-    config.read('twitterbot.ini')
+    config.read('conf/twitterbot.ini')
     
     twlogger.setLevel(level=getattr(logging,config.get('Twitter','log_level')))
    

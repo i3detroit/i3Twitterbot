@@ -6,10 +6,11 @@ from datetime import datetime,timedelta
 from ivy.std_api import *
 from ConfigParser import SafeConfigParser
 import logging
+import logging.config
 import PT6961 as led
 
-logging.basicConfig()
-camlogger = logging.getLogger('Camera')
+logging.config.fileConfig('conf/twitterbot.log.ini')
+camlogger = logging.getLogger('Twitterbot.camera')
 
 CAMURL = None
 CAMTIME = None
@@ -56,7 +57,7 @@ def ondieproc(agent, id):
 
 if __name__ == "__main__":
     config = SafeConfigParser()
-    config.read('twitterbot.ini')
+    config.read('conf/twitterbot.ini')
 
     camlogger.setLevel(level=getattr(logging,config.get('Camera','log_level')))
     CAMURL = config.get('Camera','camurl')
