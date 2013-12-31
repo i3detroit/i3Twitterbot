@@ -44,3 +44,4 @@ ivy_name=i3Twitterbot_HW
 log_level=INFO
 interested=IRC,Twitter,Website,Camera
 debounce=200
+dwell=2000

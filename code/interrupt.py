@@ -17,6 +17,7 @@ GREEN_LED = GPIO2_6
 RED_LED = GPIO2_7
 SWITCH = GPIO0_7
 DEBOUNCE = 200
+DWELL = 2000
 
 interested = None
 
@@ -45,13 +46,17 @@ def led_change():
         led_change.oldstate = -1
         led_change.oldtime = datetime.min
     state = digitalRead(SWITCH)
-    if led_change.oldstate != state and (datetime.now() - led_change.oldtime) > timedelta(milliseconds=DEBOUNCE):
-        hwlogger.info('The space is %s'%('OPEN','CLOSED')[state])
-        digitalWrite(GREEN_LED, state)
-        digitalWrite(RED_LED, not state)
-        led_change.oldstate = state
-        led_change.oldtime = datetime.now()
-        IvySendMsg('status=%1d'%(1-state))
+    if led_change.oldstate != state:
+        if(datetime.now() - led_change.oldtime) > timedelta(milliseconds=DEBOUNCE):
+            if(datetime.now() - led_change.oldtime) < timedelta(milliseconds=DWELL):
+                hwlogger.info('Rate-limiting...')
+            else:
+                hwlogger.info('The space is %s'%('OPEN','CLOSED')[state])
+                digitalWrite(GREEN_LED, state)
+                digitalWrite(RED_LED, not state)
+                led_change.oldstate = state
+                led_change.oldtime = datetime.now()
+                IvySendMsg('status=%1d'%(1-state))
 
 def setup():
     pinMode(GREEN_LED, OUTPUT)
@@ -72,6 +77,7 @@ if __name__ == "__main__":
     IvyBindMsg(status_req,'^status\?')
     hwlogger.setLevel(level=getattr(logging,config.get('Hardware','log_level')))
     DEBOUNCE = int(config.get('Hardware','debounce'))
+    DWELL = int(config.get('Hardware','dwell'))
     interested = []
     for client in config.get('Hardware','interested').split(','):
         interested.append(config.get(client,'ivy_name'))
