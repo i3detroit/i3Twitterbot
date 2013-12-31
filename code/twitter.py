@@ -23,9 +23,19 @@ def status_change(agent, status):
     status = int(status)
     ns = state_text(status)
     os = state_text(state)
-    api.update_status('At %s, the space is now %s'%(datetime.now(),ns))
+    if ns == 'OPEN':
+        twlogger.info('Space is opened, waiting for picture')
+    else:
+        api.update_status(status='At %s, the space is now %s'%(datetime.now(),ns))
     twlogger.info('Space went from %s to %s, according to %r'%(os,ns,agent))
     state = status
+
+def picture_change(agent):
+    global state
+    global api
+    if state == 1:
+        api.update_with_media('twitpic.jpg',status='At %s, the space is now %s'%(datetime.now(),ns))
+        twlogger.info('Got new image from %s, posting.'%agent)
 
 def oncxproc(agent, connected):
     if connected == IvyApplicationDisconnected :
@@ -72,4 +82,5 @@ if __name__ == "__main__":
     IvyInit(ivy_name,'[%s is ready]'%ivy_name,0,oncxproc,ondieproc)
     IvyStart(config.get('General','ivy_bus'))
     IvyBindMsg(status_change,'^status=(-?[0-1])')
+    IvyBindMsg(picture_change,'^newpic')
     IvyMainLoop()
