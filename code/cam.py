@@ -45,6 +45,9 @@ def status_change(agent, status):
     camlogger.info('Space went from %s to %s, according to %r'%(os,ns,agent))
     state = status
 
+def heartbeat(agent):
+    IvySendMsg('hb_ack')
+
 def oncxproc(agent, connected):
     if connected == IvyApplicationDisconnected :
         camlogger.warning('Ivy application %r was disconnected', agent)
@@ -67,6 +70,7 @@ if __name__ == "__main__":
     IvyInit(ivy_name,'[%s is ready]'%ivy_name,0,oncxproc,ondieproc)
     IvyStart(config.get('General','ivy_bus'))
     IvyBindMsg(status_change,'^status=(-?[0-1])')
+    IvyBindMsg(heartbeat,'^hb_syn')
 
     led.port.msh = 12000000
     led.initDisplay()

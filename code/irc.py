@@ -146,7 +146,7 @@ def status_change(agent, status):
     ns = state_text(status)
     os = state_text(state)
     for chan in TOPIC_CHANS:
-        helpers.msg(cli,chan,'The space is now %s'%ns)
+        helpers.msg(cli,chan,'The space is %s'%ns)
     irclogger.info('Space went from %s to %s, according to %r'%(os,ns,agent))
     state = status
 
@@ -166,6 +166,9 @@ def oncxproc(agent, connected):
 
 def ondieproc(agent, id):
     irclogger.warning('Received the order to die from %r with id = %d', agent, id)
+
+def heartbeat(agent):
+    IvySendMsg('hb_ack')
 
 class MyHandler(DefaultCommandHandler):
     def privmsg(self, nick, chan, msg):
@@ -198,6 +201,7 @@ if __name__ == "__main__":
     IvyInit(ivy_name,'[%s is ready]'%ivy_name,0,oncxproc,ondieproc)
     IvyStart(config.get('General','ivy_bus'))
     IvyBindMsg(status_change,'^status=(-?[0-1])')
+    IvyBindMsg(heartbeat,'^hb_syn')
 
     irclogger.setLevel(level=getattr(logging,config.get('IRC','log_level')))
 

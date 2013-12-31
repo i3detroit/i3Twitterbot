@@ -58,6 +58,9 @@ def led_change():
                 led_change.oldtime = datetime.now()
                 IvySendMsg('status=%1d'%(1-state))
 
+def heartbeat(agent):
+    IvySendMsg('hb_ack')
+
 def setup():
     pinMode(GREEN_LED, OUTPUT)
     pinMode(RED_LED, OUTPUT)
@@ -75,6 +78,7 @@ if __name__ == "__main__":
     IvyInit(ivy_name,'[%s is ready]'%ivy_name,0,oncxproc,ondieproc)
     IvyStart(config.get('General','ivy_bus'))
     IvyBindMsg(status_req,'^status\?')
+    IvyBindMsg(heartbeat,'^hb_syn')
     hwlogger.setLevel(level=getattr(logging,config.get('Hardware','log_level')))
     DEBOUNCE = int(config.get('Hardware','debounce'))
     DWELL = int(config.get('Hardware','dwell'))

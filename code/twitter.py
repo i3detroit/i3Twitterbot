@@ -6,6 +6,7 @@ from ivy.std_api import *
 from ConfigParser import SafeConfigParser
 import logging
 import logging.config
+import sys
 
 logging.config.fileConfig('conf/twitterbot.log.ini')
 twlogger = logging.getLogger('Twitterbot.Twitter')
@@ -33,6 +34,7 @@ def status_change(agent, status):
 def picture_change(agent):
     global state
     global api
+    ns = state_text(status)
     if state == 1:
         api.update_with_media('twitpic.jpg',status='At %s, the space is now %s'%(datetime.now(),ns))
         twlogger.info('Got new image from %s, posting.'%agent)
@@ -46,6 +48,9 @@ def oncxproc(agent, connected):
 
 def ondieproc(agent, id):
     twlogger.warning('Received the order to die from %r with id = %d', agent, id)
+
+def heartbeat(agent):
+    IvySendMsg('hb_ack')
 
 if __name__ == "__main__":
     config = SafeConfigParser({'access_key':None,'access_secret':None})
@@ -73,6 +78,8 @@ if __name__ == "__main__":
         auth.get_access_token(verifier)
         config.set('Twitter','access_key',auth.access_token.key)
         config.set('Twitter','access_secret',auth.access_token.secret)
+        config.write(open('conf/twitterbot.ini','w'))
+        sys.exit(0)
     else:
         auth.set_access_token(access_key,access_secret)
     
@@ -83,4 +90,5 @@ if __name__ == "__main__":
     IvyStart(config.get('General','ivy_bus'))
     IvyBindMsg(status_change,'^status=(-?[0-1])')
     IvyBindMsg(picture_change,'^newpic')
+    IvyBindMsg(heartbeat,'^hb_syn')
     IvyMainLoop()

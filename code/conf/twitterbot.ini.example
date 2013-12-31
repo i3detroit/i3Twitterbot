@@ -4,6 +4,7 @@ ivy_bus=127.255.255.255:2010
 [Twitter]
 ivy_name=i3Twitterbot_TW
 log_level=INFO
+proc=twitter.py
 consumer_key=<<<REPLACE ME>>>
 consumer_secret=<<<REPLACE ME>>>
 access_key=<<<REPLACE ME>>>
@@ -12,6 +13,7 @@ access_secret=<<<REPLACE ME>>>
 [IRC]
 ivy_name=i3Twitterbot_IRC
 log_level=INFO
+proc=irc.py
 nick=i3Twitterbot
 name=Space-status utility bot
 identify=
@@ -24,6 +26,7 @@ authed_users=admin
 [Website]
 ivy_name=i3Twitterbot_WEB
 log_level=INFO
+proc=website.py
 username=<<<REPLACE ME>>>
 password=<<<REPLACE ME>>>
 hostname=<<<REPLACE ME>>>
@@ -34,6 +37,7 @@ filename=doorbot_status
 [Camera]
 ivy_name=i3Twitterbot_CAM
 log_level=INFO
+proc=cam.py
 camuser=<<<REPLACE>>>
 campass=<<<REPLACE>>>
 camurl=http://Twittercam.i3detroit.local/cgi-bin/encoder?USER=%(camuser)s&PWD=%(campass)s&SNAPSHOT
@@ -42,6 +46,14 @@ countdown=15
 [Hardware]
 ivy_name=i3Twitterbot_HW
 log_level=INFO
+proc=interrupt.py
 interested=IRC,Twitter,Website,Camera
 debounce=200
 dwell=2000
+
+[Manager]
+ivy_name = i3Twitterbot_Manager
+log_level = DEBUG
+proc = manager.py
+timeout = 1
+agents = Hardware,Website,IRC,Twitter,Camera

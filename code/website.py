@@ -68,6 +68,9 @@ def oncxproc(agent, connected):
 def ondieproc(agent, id):
     weblogger.warning('Received the order to die from %r with id = %d', agent, id)
 
+def heartbeat(agent):
+    IvySendMsg('hb_ack')
+
 
 if __name__ == "__main__":
     config = SafeConfigParser()
@@ -87,4 +90,5 @@ if __name__ == "__main__":
     IvyStart(config.get('General','ivy_bus'))
     IvyBindMsg(status_change,'^status=(-?[0-1])')
     IvyBindMsg(picture_change,'^newpic')
+    IvyBindMsg(heartbeat,'^hb_syn')
     IvyMainLoop()

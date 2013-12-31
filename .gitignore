@@ -44,3 +44,9 @@ nosetests.xml
 *.s#*
 *.b#*
 *.l#*
+
+# twitter picture
+twitpic.jpg
+
+# system logs
+logs*
