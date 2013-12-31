@@ -34,7 +34,7 @@ def status_change(agent, status):
 def picture_change(agent):
     global state
     global api
-    ns = state_text(status)
+    ns = state_text(state)
     if state == 1:
         api.update_with_media('twitpic.jpg',status='At %s, the space is now %s'%(datetime.now(),ns))
         twlogger.info('Got new image from %s, posting.'%agent)
