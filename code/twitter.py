@@ -27,7 +27,8 @@ def status_change(agent, status):
     if ns == 'OPEN':
         twlogger.info('Space is opened, waiting for picture')
     else:
-        api.update_status(status='At %s, the space is now %s'%(datetime.now(),ns))
+        api.update_status(status='At %s, the space is now closed to guests'\
+                          %(datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
     twlogger.info('Space went from %s to %s, according to %r'%(os,ns,agent))
     state = status
 
@@ -36,7 +37,9 @@ def picture_change(agent):
     global api
     ns = state_text(state)
     if state == 1:
-        api.update_with_media('twitpic.jpg',status='At %s, the space is now %s'%(datetime.now(),ns))
+        api.update_with_media('twitpic.jpg',status='At %s, the space is now %s'\
+                              %(datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+                               'open to guests, and here\'s who flipped the switch!'))
         twlogger.info('Got new image from %s, posting.'%agent)
 
 def oncxproc(agent, connected):
