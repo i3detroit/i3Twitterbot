@@ -148,7 +148,6 @@ def status_change(agent, status):
     ns = state_text(status)
     os = state_text(state)
     for chan in TOPIC_CHANS:
-        helpers.msg(cli,chan,'The space is %s'%ns)
         if 'The space is' in curtopic:
             if os not in curtopic:
                 start = curtopic.find('The space is ') + 13
@@ -156,8 +155,9 @@ def status_change(agent, status):
                 newtopic = curtopic[:start] + ns + curtopic[end:]
             else:
                 newtopic = curtopic.replace(os,ns)
-        else:
             cli.send('TOPIC',chan,':%s'%newtopic)
+        else:
+            helpers.msg(cli,chan,'The space is %s'%ns)
     irclogger.info('Space went from %s to %s, according to %r'%(os,ns,agent))
     state = status
 

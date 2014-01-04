@@ -9,6 +9,7 @@ import logging.config
 import time
 from datetime import datetime, timedelta
 from ConfigParser import SafeConfigParser
+from termcolor import cprint
 
 logging.config.fileConfig('conf/twitterbot.log.ini')
 hwlogger = logging.getLogger('Twitterbot.hardware')
@@ -27,11 +28,11 @@ def oncxproc(agent, connected):
     if connected == IvyApplicationDisconnected :
         hwlogger.warning('Ivy application %r was disconnected', agent)
     else:
-        name = agent.agent_name#agent['agent_name'][agent['agent_name'].find('(')+1:agent['agent_name'].find(')')]
-        hwlogger.info('Ivy application %r was connected', agent)
-        if name in interested:
-            #IvySendMsg('status=%1d'%state)
-            hwlogger.debug('%s is interested in updates.'%agent)
+        name = agent.agent_name
+        hwlogger.info('Ivy application %r was connected (name=%s)'%(agent,name))
+        if name in interested and state != -1:
+            IvySendMsg('status=%1d'%state)
+            hwlogger.info('%r is interested in updates.'%agent)
     hwlogger.debug('Current Ivy applications are [%s]', IvyGetApplicationList())
 
 def ondieproc(agent, id):
@@ -67,6 +68,8 @@ def setup():
     pinMode(RED_LED, OUTPUT)
     pinMode(SWITCH, INPUT)
     attachInterrupt(SWITCH,led_change,BOTH)
+    state = digitalRead(SWITCH)
+    led_change()
 
 def loop():
     time.sleep(1.0)
@@ -86,4 +89,5 @@ if __name__ == "__main__":
     interested = []
     for client in config.get('Hardware','interested').split(','):
         interested.append(config.get(client,'ivy_name'))
+    print interested
     run(setup, loop)
