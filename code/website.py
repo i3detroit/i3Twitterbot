@@ -91,4 +91,5 @@ if __name__ == "__main__":
     IvyBindMsg(status_change,'^status=(-?[0-1])')
     IvyBindMsg(picture_change,'^newpic')
     IvyBindMsg(heartbeat,'^hb_syn')
+    IvySendMsg('status?')
     IvyMainLoop()

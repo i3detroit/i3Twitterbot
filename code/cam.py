@@ -71,6 +71,7 @@ if __name__ == "__main__":
     IvyStart(config.get('General','ivy_bus'))
     IvyBindMsg(status_change,'^status=(-?[0-1])')
     IvyBindMsg(heartbeat,'^hb_syn')
+    IvySendMsg('status?')
 
     led.port.msh = 12000000
     led.initDisplay()

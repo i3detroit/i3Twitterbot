@@ -25,6 +25,7 @@ AUTHD = None
 
 state = -1
 cli = None
+curtopic = ''
 
 greetings = ['Hello','Hi','Good morning','Good afternoon','Good evening','Hey']
 
@@ -142,17 +143,30 @@ commands = {
 def status_change(agent, status):
     global state
     global cli
+    global curtopic
     status = int(status)
     ns = state_text(status)
     os = state_text(state)
     for chan in TOPIC_CHANS:
         helpers.msg(cli,chan,'The space is %s'%ns)
+        if 'The space is' in curtopic:
+            if os not in curtopic:
+                start = curtopic.find('The space is ') + 13
+                end = curtopic.find(' ',start)
+                newtopic = curtopic[:start] + ns + curtopic[end:]
+            else:
+                newtopic = curtopic.replace(os,ns)
+        else:
+            cli.send('TOPIC',chan,':%s'%newtopic)
     irclogger.info('Space went from %s to %s, according to %r'%(os,ns,agent))
     state = status
 
 def connect_callback(cli):
     if IDENT:
+        irclogger.debug('Identifying with %s.'%IDENT)
         helpers.identify(cli,IDENT)
+    else:
+        irclogger.debug('NOT identifying')
     helpers.user(cli,NICK,NAME)
     for CHAN in CHANS:
         helpers.join(cli, CHAN)
@@ -193,6 +207,18 @@ class MyHandler(DefaultCommandHandler):
                 helpers.msg(self.client,chan,'%s: "%s" is not a command I recognize. I can respond cordially to greetings, or to any of these commands: %s'%(n,cmd,', '.join(commands.keys())))
         irclogger.info("%s in %s said: %s" % (nick, chan, msg))
 
+    def topic(self,user,channel,topic):
+        global curtopic
+        curtopic = topic
+        irclogger.info('Topic by %s in %s is (%s) '\
+                       %(user,channel,topic))
+
+    def currenttopic(self,server,nick,channel,topic):
+        global curtopic
+        curtopic = topic
+        irclogger.info('Topic for %s on %s is (%s) '
+                       '[%s]'%(channel,server,topic,nick))
+
 if __name__ == "__main__":
     config = SafeConfigParser({'identify':None})
     config.read('conf/twitterbot.ini')
@@ -202,6 +228,7 @@ if __name__ == "__main__":
     IvyStart(config.get('General','ivy_bus'))
     IvyBindMsg(status_change,'^status=(-?[0-1])')
     IvyBindMsg(heartbeat,'^hb_syn')
+    IvySendMsg('status?')
 
     irclogger.setLevel(level=getattr(logging,config.get('IRC','log_level')))
 

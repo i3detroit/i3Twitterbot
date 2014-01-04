@@ -30,7 +30,8 @@ def oncxproc(agent, connected):
         name = agent.agent_name#agent['agent_name'][agent['agent_name'].find('(')+1:agent['agent_name'].find(')')]
         hwlogger.info('Ivy application %r was connected', agent)
         if name in interested:
-            IvySendMsg('status=%1d'%state)
+            #IvySendMsg('status=%1d'%state)
+            hwlogger.debug('%s is interested in updates.'%agent)
     hwlogger.debug('Current Ivy applications are [%s]', IvyGetApplicationList())
 
 def ondieproc(agent, id):
