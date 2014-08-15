@@ -81,4 +81,4 @@ if __name__ == "__main__":
                 mainlogger.warn('Agent %s died and was reborn.'%agent)
             else:
                 IvySendMsg('hb_syn')
-        sleep(0.1)
+        sleep(1)

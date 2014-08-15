@@ -1,0 +1,9 @@
+[Unit]
+Description=Starting Twitterbot manager
+
+[Service]
+Type=oneshot
+ExecStart=cd /home/root/i3Twitterbot/code; /usr/bin/python /home/root/src/i3Twitterbot/code/manager.py
+
+[Install]
+WantedBy=multi-user.target
